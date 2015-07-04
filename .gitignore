@@ -1,0 +1,7 @@
+build
+composer.lock
+docs
+vendor
+public
+.DS_Store
+index.php
