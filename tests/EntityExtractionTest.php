@@ -1,6 +1,6 @@
 <?php
 
-include "TestHelper.php";
+include_once "TestHelper.php";
 
 class EntityExtractionTest extends PHPUnit_Framework_TestCase {
 

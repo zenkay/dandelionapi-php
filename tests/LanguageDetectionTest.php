@@ -1,6 +1,6 @@
 <?php
 
-include "TestHelper.php";
+include_once "TestHelper.php";
 
 class LanguageDetectionTest extends PHPUnit_Framework_TestCase {
 
