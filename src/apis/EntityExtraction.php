@@ -11,11 +11,9 @@ class EntityExtraction extends DandelionBase
 
     const END_POINT = "https://api.dandelion.eu/datatxt/nex/v1";
 
-    private static $_commands =[
-        "text",
-        "url",
-        "html",
-        "htmlFragment",
+    private static $_dollarPrefix =[
+        'app_key'=> '$app_key',
+        'app_id' => '$app_id',
     ];
 
     /**
@@ -192,7 +190,11 @@ class EntityExtraction extends DandelionBase
             if($this->$_haver() == false){
                 continue;
             }
-            $_params[$_index] = $this->$_getter();
+            if(isset(static::$_dollarPrefix[$_index])) {
+                $_params[static::$_dollarPrefix[$_index]] = $this->$_getter();
+            } else {
+                $_params[$_index] = $this->$_getter();
+            }
         }
 
         try{
