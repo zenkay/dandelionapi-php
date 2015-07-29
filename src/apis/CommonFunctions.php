@@ -12,7 +12,7 @@ namespace Dandelionapi\apis;
 use ReflectionClass;
 use ReflectionProperty;
 
-Trait CommonFuntions
+Trait CommonFunctions
 {
     protected function _populate($attributes)
     {
@@ -32,7 +32,23 @@ Trait CommonFuntions
 
     protected function readProperties(){
         $_reflect = new ReflectionClass($this);
-        $_rv   = $_reflect->getProperties(ReflectionProperty::IS_PROTECTED);
+        $_properties   = $_reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+        $_rv = [];
+        foreach ($_properties as $_k => $_v) {
+            $_index  = $this->deCamelize($_v->name);
+            $_func   = ucfirst(ltrim($_v->name, '_'));
+            $_getter = "get{$_func}";
+            $_haver  = "has{$_func}";
+            if ($this->$_haver() == false) {
+                continue;
+            }
+            if (isset(parent::$_dollarPrefix[$_index])) {
+                $_rv[parent::$_dollarPrefix[$_index]] = $this->$_getter();
+            } else {
+                $_rv[$_index] = $this->$_getter();
+            }
+        }
+
         return $_rv;
     }
 }

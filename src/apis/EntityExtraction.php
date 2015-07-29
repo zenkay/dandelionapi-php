@@ -1,20 +1,16 @@
 <?php
- 
+
 namespace Dandelionapi\apis;
- 
+
 use GuzzleHttp\Client;
 
 class EntityExtraction extends DandelionBase
 {
 
-    use CommonFuntions;
+    use CommonFunctions;
 
     const END_POINT = "https://api.dandelion.eu/datatxt/nex/v1";
 
-    private static $_dollarPrefix =[
-        'app_key'=> '$app_key',
-        'app_id' => '$app_id',
-    ];
 
     /**
      * @var string
@@ -22,7 +18,7 @@ class EntityExtraction extends DandelionBase
      * request, following these guidelines:
      * use "text" when you have plain text that doesn't need any pre-processing;
      */
-    protected $_text;
+    public $text;
 
     /**
      * These parameters define how you send text to the Entity Extraction API. Only one of them can be used in each
@@ -31,7 +27,7 @@ class EntityExtraction extends DandelionBase
      *
      * use "url" when you have an URL and you want the Entity Extraction API to work on its main content; it will fetch the URL for you, and use an AI algorithm to extract the relevant part of the document to work on; in this case, the main content will also be returned by the API to allow you to properly use the annotation offsets;
      */
-    protected $_url;
+    public $url;
 
     /**
      * These parameters define how you send text to the Entity Extraction API. Only one of them can be used in each
@@ -40,7 +36,7 @@ class EntityExtraction extends DandelionBase
      *
      * use "html" when you have an HTML document and you want the Entity Extraction API to work on its main content, similarly to what the "url" parameter does.
      */
-    protected $_html;
+    public $html;
 
     /**
      * These parameters define how you send text to the Entity Extraction API. Only one of them can be used in each
@@ -49,60 +45,60 @@ class EntityExtraction extends DandelionBase
      *
      * use "html_fragment" when you have an HTML snippet and you want the Entity Extraction API to work on its content. It will remove all HTML tags before analyzing it.
      */
-    protected $_htmlFragment;
+    public $htmlFragment;
 
     /**
      * The language of the text to be annotated; currently English, French, German, Italian and Portuguese are supported. Leave this parameter out to let the Entity Extraction API automatically detect the language for you.
      * @var
      * lang optional
-     * Type	string
-     * Default value	auto
-     * Accepted values	de | en | fr | it | pt | auto
+     * Type    string
+     * Default value    auto
+     * Accepted values    de | en | fr | it | pt | auto
      */
-    protected $_lang; // = "auto";
+    public $lang; // = "auto";
 
 
     /**
      * The threshold for the confidence value; entities with a confidence value below this threshold will be discarded. Confidence is a numeric estimation of the quality of the annotation, which ranges between 0 and 1. A higher threshold means you will get less but more precise annotations. A lower value means you will get more annotations but also more erroneous ones.
      * @var
      * min_confidence optional
-     * Type	float
-     * Default value	0.6
-     * Accepted values	0.0 .. 1.0
+     * Type    float
+     * Default value    0.6
+     * Accepted values    0.0 .. 1.0
      */
-    protected $_minConfidence; // = "0.6";
+    public $minConfidence; // = "0.6";
 
     /**
      * min_length optional
      * With this parameter you can remove those entities having a spot shorter than a minimum length.
-     * Type	integer
-     * Default value	2
-     * Accepted values	2 .. +inf
+     * Type    integer
+     * Default value    2
+     * Accepted values    2 .. +inf
      * @var
      */
-    protected $_minLength; // = "2";
+    public $minLength; // = "2";
 
     /**
      * parse_hashtag renamed optional
      * Use social.hashtag instead.
      * social.hashtag optional
      * With this parameter you enable special hashtag parsing to correctly analyze tweets and facebook posts.
-     * Type	boolean
-     * Default value	false
-     * Accepted values	true | false
+     * Type    boolean
+     * Default value    false
+     * Accepted values    true | false
      * @var
      */
-    protected $_parseHashtag; // = "false";
+    public $parseHashtag; // = "false";
 
     /**
      * social.mention optional
      * With this parameter you enable special mention parsing to correctly analyze tweets and facebook posts.
-     * Type	boolean
-     * Default value	false
-     * Accepted values	true | false
+     * Type    boolean
+     * Default value    false
+     * Accepted values    true | false
      * @var
      */
-    protected $_socialMention; // = "false";
+    public $socialMention; // = "false";
 
     /**
      * include optional
@@ -113,13 +109,13 @@ class EntityExtraction extends DandelionBase
      * "image" adds a link to an image depicting the tagged entity, as well as a link to the image thumbnail, served by Wikipedia. Please check the licensing terms of each image on Wikipedia before using it in your app;
      * "lod" adds links to equivalent (sameAs) entities in Linked Open Data repositories or other websites. It currently only supports DBpedia and Wikipedia;
      * "alternate_labels" adds some other names used when referring to the entity.
-     * Type	comma-separated list
-     * Default value	<empty string>
-     * Accepted values	types, categories, abstract, image, lod, alternate_labels
-     * Example	include=types,lod
+     * Type    comma-separated list
+     * Default value    <empty string>
+     * Accepted values    types, categories, abstract, image, lod, alternate_labels
+     * Example    include=types,lod
      * @var
      */
-    protected $_include; // = "";
+    public $include; // = "";
 
     /**
      * extra_types optional
@@ -127,48 +123,48 @@ class EntityExtraction extends DandelionBase
      * "phone" enables matching of phone numbers;
      * "vat" enables matching of VAT IDs (Italian only).
      * Note that these parameters require the country parameter to be set, and VAT IDs will work only for Italy.
-     * Type	comma-separated list
-     * Default value	<empty string>
-     * Accepted values	phone, vat
-     * Example	extra_types=phone,vat
+     * Type    comma-separated list
+     * Default value    <empty string>
+     * Accepted values    phone, vat
+     * Example    extra_types=phone,vat
      * @var
      */
-    protected $_extraTypes; // = "";
+    public $extraTypes; // = "";
 
     /**
      * country optional
      * This parameter specifies the country which we assume VAT and telephone numbers to be coming from. This is important to get correct results, as different countries may adopt different formats.
-     * Type	string
-     * Default value	<empty string>
-     * Accepted values	AD, AE, AM, AO, AQ, AR, AU, BB, BR, BS, BY, CA, CH, CL, CN, CX, DE, FR, GB, HU, IT, JP, KR, MX, NZ, PG, PL, RE, SE, SG, US, YT, ZW
+     * Type    string
+     * Default value    <empty string>
+     * Accepted values    AD, AE, AM, AO, AQ, AR, AU, BB, BR, BS, BY, CA, CH, CL, CN, CX, DE, FR, GB, HU, IT, JP, KR, MX, NZ, PG, PL, RE, SE, SG, US, YT, ZW
      * @var
      */
-    protected $_country; // = "";
+    public $country; // = "";
 
     /**
      * custom_spots optional
      * Enable specific user-defined spots to be used when annotating the text. You can define your own spots or use someone else's ones if they shared the spots-ID with you.
-     * Type	string
-     * Default value	<empty string>
-     * Accepted values	any valid spots-ID
+     * Type    string
+     * Default value    <empty string>
+     * Accepted values    any valid spots-ID
      * @var
      */
-    protected $_customSpots; // = "";
+    public $customSpots; // = "";
 
 
     /**
      * @var float epsilon optional advanced
      * This parameter defines whether the Entity Extraction API should rely more on the context or favor more common topics to discover entities. Using an higher value favors more common topics, this may lead to better results when processing tweets or other fragmented inputs where the context is not always reliable.
-     * Default value	0.3
-     * Accepted values	0.0 .. 0.5
+     * Default value    0.3
+     * Accepted values    0.0 .. 0.5
      */
-    protected $_epsilon; // = "0.3";
+    public $epsilon; // = "0.3";
 
 
     /**
      * Create a new EntityExtraction Instance
      */
-    public function __construct($params=[])
+    public function __construct($params = [])
     {
         $this->_populate($params);
     }
@@ -176,56 +172,44 @@ class EntityExtraction extends DandelionBase
 
     public function callText()
     {
-        if($this->hasText()==false){
+        if ($this->hasText() == false) {
             throw new \Exception("Missing text");
         }
+        $_params  = $this->readProperties();
+        try {
+            $client   = new Client();
+            $response = $client->get(static::END_POINT,
+                [
+                    'query'   => $_params,
+                    'timeout' => '60',
+                ]
+            );
+            $_sc      = $response->getStatusCode();
 
-        $_params=[];
-        $_props=$this->readProperties();
-        foreach($_props as $_k => $_v){
-            $_index = $this->deCamelize($_v->name);
-            $_func = ucfirst( ltrim($_v->name,'_'));
-            $_getter = "get{$_func}";
-            $_haver = "has{$_func}";
-            if($this->$_haver() == false){
-                continue;
+            if ($_sc < 200 || $_sc >= 300) {
+                throw new \Exception("error");
             }
-            if(isset(static::$_dollarPrefix[$_index])) {
-                $_params[static::$_dollarPrefix[$_index]] = $this->$_getter();
-            } else {
-                $_params[$_index] = $this->$_getter();
+            $_buff = "";
+            $_stream = $response->getBody();
+            while (!$_stream->eof()) {
+                $_buff .= $_stream->read(1024);
             }
-        }
+            $_rv = json_decode($_buff);
 
-        try{
-        $client = new Client();
-        $res = $client->get(static::END_POINT,
-            [
-                'query' =>  $_params,
-                'timeout' => '60',
-            ]
-        );
-        $_sc = $res->getStatusCode();
-
-        if($_sc < 200 || $_sc>=300  ){
-            throw new \Exception("error");
-        }
-        $_rv = $res->getBody();
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             throw $e;
         }
         return $_rv;
     }
 
-
     /************************************************************/
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getText()
     {
-        return $this->_text;
+        return $this->text;
     }
 
     /**
@@ -233,15 +217,15 @@ class EntityExtraction extends DandelionBase
      */
     public function hasText()
     {
-        return isset($this->_text);
+        return isset($this->text);
     }
 
     /**
-     * @param mixed $text
+     * @param string $text
      */
     public function setText($text)
     {
-        $this->_text = $text;
+        $this->text = $text;
         return $this;
     }
 
@@ -250,7 +234,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getUrl()
     {
-        return $this->_url;
+        return $this->url;
     }
 
     /**
@@ -258,7 +242,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasUrl()
     {
-        return isset($this->_url);
+        return isset($this->url);
     }
 
     /**
@@ -266,7 +250,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setUrl($url)
     {
-        $this->_url = $url;
+        $this->url = $url;
         return $this;
     }
 
@@ -275,7 +259,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getHtml()
     {
-        return $this->_html;
+        return $this->html;
     }
 
     /**
@@ -283,7 +267,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasHtml()
     {
-        return isset($this->_html);
+        return isset($this->html);
     }
 
     /**
@@ -291,7 +275,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setHtml($html)
     {
-        $this->_html = $html;
+        $this->html = $html;
         return $this;
     }
 
@@ -300,7 +284,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getHtmlFragment()
     {
-        return $this->_htmlFragment;
+        return $this->htmlFragment;
     }
 
     /**
@@ -308,7 +292,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasHtmlFragment()
     {
-        return isset($this->_htmlFragment);
+        return isset($this->htmlFragment);
     }
 
     /**
@@ -316,7 +300,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setHtmlFragment($htmlFragment)
     {
-        $this->_htmlFragment = $htmlFragment;
+        $this->htmlFragment = $htmlFragment;
         return $this;
     }
 
@@ -325,7 +309,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getLang()
     {
-        return $this->_lang;
+        return $this->lang;
     }
 
     /**
@@ -333,7 +317,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasLang()
     {
-        return isset($this->_lang);
+        return isset($this->lang);
     }
 
     /**
@@ -341,7 +325,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setLang($lang)
     {
-        $this->_lang = $lang;
+        $this->lang = $lang;
         return $this;
     }
 
@@ -350,7 +334,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getMinConfidence()
     {
-        return $this->_minConfidence;
+        return $this->minConfidence;
     }
 
     /**
@@ -358,7 +342,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasMinConfidence()
     {
-        return isset($this->_minConfidence);
+        return isset($this->minConfidence);
     }
 
     /**
@@ -366,7 +350,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setMinConfidence($minConfidence)
     {
-        $this->_minConfidence = $minConfidence;
+        $this->minConfidence = $minConfidence;
         return $this;
     }
 
@@ -375,7 +359,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getMinLength()
     {
-        return $this->_minLength;
+        return $this->minLength;
     }
 
     /**
@@ -383,7 +367,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasMinLength()
     {
-        return isset($this->_minLength);
+        return isset($this->minLength);
     }
 
     /**
@@ -391,7 +375,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setMinLength($minLength)
     {
-        $this->_minLength = $minLength;
+        $this->minLength = $minLength;
         return $this;
     }
 
@@ -400,7 +384,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getParseHashtag()
     {
-        return $this->_parseHashtag;
+        return $this->parseHashtag;
     }
 
     /**
@@ -408,7 +392,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasParseHashtag()
     {
-        return isset($this->_parseHashtag);
+        return isset($this->parseHashtag);
     }
 
     /**
@@ -416,7 +400,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setParseHashtag($parseHashtag)
     {
-        $this->_parseHashtag = $parseHashtag;
+        $this->parseHashtag = $parseHashtag;
         return $this;
     }
 
@@ -425,7 +409,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getSocialMention()
     {
-        return $this->_socialMention;
+        return $this->socialMention;
     }
 
     /**
@@ -433,7 +417,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasSocialMention()
     {
-        return isset($this->_socialMention);
+        return isset($this->socialMention);
     }
 
     /**
@@ -441,7 +425,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setSocialMention($socialMention)
     {
-        $this->_socialMention = $socialMention;
+        $this->socialMention = $socialMention;
         return $this;
     }
 
@@ -450,7 +434,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getInclude()
     {
-        return $this->_include;
+        return $this->include;
     }
 
     /**
@@ -458,7 +442,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasInclude()
     {
-        return isset($this->_include);
+        return isset($this->include);
     }
 
     /**
@@ -466,7 +450,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setInclude($include)
     {
-        $this->_include = $include;
+        $this->include = $include;
         return $this;
     }
 
@@ -475,7 +459,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getExtraTypes()
     {
-        return $this->_extraTypes;
+        return $this->extraTypes;
     }
 
     /**
@@ -483,7 +467,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasExtraTypes()
     {
-        return isset($this->_extraTypes);
+        return isset($this->extraTypes);
     }
 
     /**
@@ -491,7 +475,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setExtraTypes($extraTypes)
     {
-        $this->_extraTypes = $extraTypes;
+        $this->extraTypes = $extraTypes;
         return $this;
     }
 
@@ -500,7 +484,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getCountry()
     {
-        return $this->_country;
+        return $this->country;
     }
 
     /**
@@ -508,7 +492,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasCountry()
     {
-        return isset($this->_country);
+        return isset($this->country);
     }
 
     /**
@@ -516,7 +500,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setCountry($country)
     {
-        $this->_country = $country;
+        $this->country = $country;
         return $this;
     }
 
@@ -525,7 +509,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getCustomSpots()
     {
-        return $this->_customSpots;
+        return $this->customSpots;
     }
 
     /**
@@ -533,7 +517,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasCustomSpots()
     {
-        return isset($this->_customSpots);
+        return isset($this->customSpots);
     }
 
     /**
@@ -541,7 +525,7 @@ class EntityExtraction extends DandelionBase
      */
     public function setCustomSpots($customSpots)
     {
-        $this->_customSpots = $customSpots;
+        $this->customSpots = $customSpots;
         return $this;
     }
 
@@ -550,7 +534,7 @@ class EntityExtraction extends DandelionBase
      */
     public function getEpsilon()
     {
-        return $this->_epsilon;
+        return $this->epsilon;
     }
 
     /**
@@ -558,7 +542,7 @@ class EntityExtraction extends DandelionBase
      */
     public function hasEpsilon()
     {
-        return isset($this->_epsilon);
+        return isset($this->epsilon);
     }
 
     /**
@@ -566,13 +550,9 @@ class EntityExtraction extends DandelionBase
      */
     public function setEpsilon($epsilon)
     {
-        $this->_epsilon = $epsilon;
+        $this->epsilon = $epsilon;
         return $this;
     }
-
-
-
-
 
 
 

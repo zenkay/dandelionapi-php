@@ -11,40 +11,20 @@ namespace Dandelionapi\apis;
 
 class DandelionBase
 {
-    protected $_appId;
-    protected $_appKey;
+    public $appId;
+    public $appKey;
 
-    /**
-     * @return mixed
-     */
-    public function getAppKey()
-    {
-        return $this->_appKey;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasAppKey()
-    {
-        return isset($this->_appKey);
-    }
-
-    /**
-     * @param mixed $appKey
-     */
-    public function setAppKey($appKey)
-    {
-        $this->_appKey = $appKey;
-        return $this;
-    }
+    protected static $_dollarPrefix = [
+        'app_key' => '$app_key',
+        'app_id'  => '$app_id',
+    ];
 
     /**
      * @return mixed
      */
     public function getAppId()
     {
-        return $this->_appId;
+        return $this->appId;
     }
 
     /**
@@ -52,7 +32,7 @@ class DandelionBase
      */
     public function hasAppId()
     {
-        return isset($this->_appId);
+        return isset($this->appId);
     }
 
     /**
@@ -60,9 +40,35 @@ class DandelionBase
      */
     public function setAppId($appId)
     {
-        $this->_appId = $appId;
+        $this->appId = $appId;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAppKey()
+    {
+        return $this->appKey;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAppKey()
+    {
+        return isset($this->appKey);
+    }
+
+    /**
+     * @param mixed $appKey
+     */
+    public function setAppKey($appKey)
+    {
+        $this->appKey = $appKey;
+        return $this;
+    }
+
 
 
 }
