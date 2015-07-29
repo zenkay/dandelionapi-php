@@ -1,6 +1,6 @@
 <?php
  
-namespace Dandelionapi;
+namespace Dandelionapi\apis;
  
 class TextExtraction
 {

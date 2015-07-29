@@ -1,5 +1,5 @@
 <?php
  
-namespace Dandelionapi;
+namespace Dandelionapi\apis;
  
 define("VERSION", "0.0.1");
