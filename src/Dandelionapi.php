@@ -1,5 +1,18 @@
 <?php
+namespace Dandelionapi;
 
-include_once dirname(__FILE__)."/Dandelionapi/EntityExtraction.php";
-include_once dirname(__FILE__)."/Dandelionapi/LanguageDetection.php";
-include_once dirname(__FILE__)."/Dandelionapi/TextExtraction.php";
+use Dandelionapi\apis\EntityExtraction;
+
+class Dandelionapi{
+
+    // implementazione statica?
+    public static function EntityExtraction($params = []){
+        $_o = new EntityExtraction($params);
+        try{
+            $_rv = $_o->callText();
+        } catch(\Exception $e){
+            throw $e;
+        }
+        return $_rv;
+    }
+}
