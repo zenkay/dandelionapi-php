@@ -170,10 +170,23 @@ class EntityExtraction extends DandelionBase
     }
 
 
-    public function callText()
+    /**
+     * esegue tutte le chiamate di EntityExtraction in funzione dei parametri
+     * @return \stdClass
+     * @throws \Exception
+     */
+    public function run()
     {
-        if ($this->hasText() == false) {
-            throw new \Exception("Missing text");
+        $_command = 0;
+        $_command += $this->hasText() ? 1 : 0;
+        $_command += $this->hasUrl() ? 1 : 0;
+        $_command += $this->hasHtml() ? 1 : 0;
+        $_command += $this->hasHtmlFragment() ? 1 : 0;
+        if ( $_command == 0) {
+            throw new \Exception("Missing required param");
+        }
+        if ( $_command > 1) {
+            throw new \Exception("Too many required param");
         }
         $_params  = $this->readProperties();
         try {
