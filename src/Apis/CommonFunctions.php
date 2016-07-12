@@ -6,7 +6,7 @@
  * Time: 1:29 PM
  */
 
-namespace Dandelionapi\apis;
+namespace Dandelionapi\Apis;
 
 
 use ReflectionClass;

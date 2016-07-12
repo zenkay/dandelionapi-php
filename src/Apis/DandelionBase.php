@@ -6,18 +6,52 @@
  * Time: 4:42 PM
  */
 
-namespace Dandelionapi\apis;
+namespace Dandelionapi\Apis;
 
 
 class DandelionBase
 {
+    public $token;
+    /**
+     * @deprecated
+     */
     public $appId;
+    /**
+     * @deprecated
+     */
     public $appKey;
 
     protected static $_dollarPrefix = [
         'app_key' => '$app_key',
         'app_id'  => '$app_id',
     ];
+
+    /**
+     * @return mixed
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasToken()
+    {
+        return isset($this->token);
+    }
+
+    /**
+     * @param mixed $token
+     *
+     * @return $this
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+        return $this;
+    }
 
     /**
      * @return mixed

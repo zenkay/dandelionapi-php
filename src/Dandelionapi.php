@@ -1,20 +1,25 @@
 <?php
 namespace Dandelionapi;
 
-use Dandelionapi\apis\EntityExtraction;
+use Dandelionapi\Apis\EntityExtraction;
 
 class Dandelionapi{
 
     protected $config=[];
 
     /**
-     * @param $apiId id
-     * @param $apiKey key
+     * @param array|string $credentials use to set the token or (apiId and apiKey)
+     *                                  of your DandelionAPI account.
      */
-    public function __construct($apiId,$apiKey)
+    public function __construct($credentials)
     {
-        $this->config['appId']  = $apiId;
-        $this->config['appKey'] = $apiKey;
+        if (is_string($credentials)) {
+            $this->config['token'] = $credentials;
+        } else {
+            $this->config['token'] = @$credentials['token'] ?: null;
+            $this->config['appId'] = @$credentials['appId'] ?: null;
+            $this->config['appKey'] = @$credentials['appKey'] ?: null;
+        }
     }
 
 
