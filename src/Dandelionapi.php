@@ -17,7 +17,7 @@ class Dandelionapi{
             $this->config['token'] = $credentials;
         } else {
             $this->config['token'] = @$credentials['token'] ?: null;
-            $this->config['appId'] = @$credentials['apiId'] ?: null;
+            $this->config['appId'] = @$credentials['appId'] ?: null;
             $this->config['appKey'] = @$credentials['appKey'] ?: null;
         }
     }
