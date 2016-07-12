@@ -1,13 +1,14 @@
 <?php
+    namespace Dandelionapi\Test;
 
-include_once "TestHelper.php";
+    use Dandelionapi\apis\EntityExtraction;
 
-class EntityExtractionTest extends PHPUnit_Framework_TestCase {
+    class EntityExtractionTest extends \PHPUnit_Framework_TestCase
+    {
+        public function testInizialization()
+        {
+            $element = new EntityExtraction();
 
-	public function testInizialization(){
-		$element = new Dandelionapi\EntityExtraction;
-		$this->assertInstanceOf("Dandelionapi\EntityExtraction", $element);
-
-	}
-	
-}
+            static::assertInstanceOf('Dandelionapi\apis\EntityExtraction', $element);
+        }
+    }

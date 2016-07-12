@@ -1,13 +1,14 @@
 <?php
+    namespace Dandelionapi\Test;
 
-include_once "TestHelper.php";
+    use Dandelionapi\apis\TextExtraction;
 
-class TextExtractionTest extends PHPUnit_Framework_TestCase {
+    class TextExtractionTest extends \PHPUnit_Framework_TestCase
+    {
+        public function testInizialization()
+        {
+            $element = new TextExtraction();
 
-	public function testInizialization(){
-		$element = new Dandelionapi\TextExtraction;
-		$this->assertInstanceOf("Dandelionapi\TextExtraction", $element);
-
-	}
-	
-}
+            $this->assertInstanceOf('Dandelionapi\apis\TextExtraction', $element);
+        }
+    }
