@@ -1,7 +1,7 @@
 <?php
     namespace Dandelionapi\Test;
 
-    use Dandelionapi\apis\TextExtraction;
+    use Dandelionapi\Apis\TextExtraction;
 
     class TextExtractionTest extends \PHPUnit_Framework_TestCase
     {
@@ -9,6 +9,6 @@
         {
             $element = new TextExtraction();
 
-            $this->assertInstanceOf('Dandelionapi\apis\TextExtraction', $element);
+            $this->assertInstanceOf('Dandelionapi\Apis\TextExtraction', $element);
         }
     }

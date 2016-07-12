@@ -6,7 +6,7 @@
  * Time: 4:42 PM
  */
 
-namespace Dandelionapi\apis;
+namespace Dandelionapi\Apis;
 
 
 class DandelionBase

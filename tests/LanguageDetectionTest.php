@@ -1,7 +1,7 @@
 <?php
     namespace Dandelionapi\Test;
 
-    use Dandelionapi\apis\LanguageDetection;
+    use Dandelionapi\Apis\LanguageDetection;
 
     class LanguageDetectionTest extends \PHPUnit_Framework_TestCase
     {
@@ -9,6 +9,6 @@
         {
             $element = new LanguageDetection();
 
-            static::assertInstanceOf('Dandelionapi\apis\LanguageDetection', $element);
+            static::assertInstanceOf('Dandelionapi\Apis\LanguageDetection', $element);
         }
     }

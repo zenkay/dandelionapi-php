@@ -1,7 +1,7 @@
 <?php
     namespace Dandelionapi\Test;
 
-    use Dandelionapi\apis\EntityExtraction;
+    use Dandelionapi\Apis\EntityExtraction;
     use Dandelionapi\Dandelionapi;
 
     class EntityExtractionTest extends \PHPUnit_Framework_TestCase
@@ -13,7 +13,7 @@
         {
             $element = new EntityExtraction();
 
-            static::assertInstanceOf('Dandelionapi\apis\EntityExtraction', $element);
+            static::assertInstanceOf('Dandelionapi\Apis\EntityExtraction', $element);
         }
 
         /**

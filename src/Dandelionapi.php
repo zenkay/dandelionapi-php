@@ -1,7 +1,7 @@
 <?php
 namespace Dandelionapi;
 
-use Dandelionapi\apis\EntityExtraction;
+use Dandelionapi\Apis\EntityExtraction;
 
 class Dandelionapi{
 
